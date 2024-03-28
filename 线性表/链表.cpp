@@ -8,7 +8,7 @@ typedef struct LNode {
   struct LNode* next;
 } LNode, *LinkList;
 
-{ // 不带头节点的操作
+//{ // 不带头节点的操作
 // bool InitList(LinkList &L) { //不带头节点初始化
 //   L = NULL;
 //   return true;
@@ -44,7 +44,7 @@ typedef struct LNode {
 //   p->next = s;
 //   return true;
 // }
-}
+//}
 
 LNode* GetElem(LinkList L, int i) {// 带头结点 按位查找
   if(i < 0) {
@@ -191,7 +191,7 @@ LinkList List_TailInsert(LinkList &L) { //带头节点的尾插法
   
 }
 
-LinkList List_HeadInsert(LinkList &L) { //带头节点的尾插法
+LinkList List_HeadInsert(LinkList &L) { //带头节点的头插法
   // L = (LinkList)malloc(sizeof(LNode));
   // L->next = NULL;
   InitList(L);
@@ -210,13 +210,45 @@ LinkList List_HeadInsert(LinkList &L) { //带头节点的尾插法
   
 }
 
+void re(LinkList &L) {//逆置单链表
+  LNode *h = L->next, *r = L->next;
+  for (int i = 0; i < 5; i++){
+  	// printf("1%d %d\n", h->data,r->data);
+    r = h->next;
+    // printf("2%d %d\n", h->data,r->data);
+    h->next = r->next;
+    // printf("3%d %d\n", h->data,r->data);
+    r->next = L->next;
+    // printf("4%d %d\n", h->data,r->data);
+    L->next = r;
+    // printf("5%d %d\n", h->data,r->data);
+  }
+  h->next = NULL;
+  // r->next = NULL;
+  // LNode *h = L, *r = L;
+  // h = L->next;
+  // L->next = NULL;
+  // for (int i = 0; i < 5; i++){
+  //   r = h->next;
+  //   h->next = L->next;
+  //   L->next = h;
+  //   h = r;
+  // }
+  // r->next = NULL;
+}
 int main() {
   LinkList L;
-  List_HeadInsert(L);
+  List_TailInsert(L);
   LNode *p = L->next;
   for (int i = 0; i < 5; i++){
     printf("%d ", p->data);
     p = p->next;
   }
+  printf("\n");
   
+	p = L->next;
+  while (p!=NULL){
+		printf("%d ", p->data);
+		p = p->next;
+	}
 }
