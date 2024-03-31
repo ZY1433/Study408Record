@@ -108,7 +108,7 @@ bool ListInsert(LinkList &L, int i, ElmeType e){//带头结点在位序i插入
   return InsertNextNode(p,e);
 }
 
-bool InsertPriorNode(LNode*p, LNode* s) { // 在p前面插入s 先插到后面再交换值
+bool InsertPriorNode(LNode*p, LNode* s) { // 在p前面插入s (先插到后面再交换值)
   if(s == NULL || p == NULL) {
     return false;
   }
