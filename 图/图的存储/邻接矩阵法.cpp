@@ -3,7 +3,7 @@
 
 #define MaxVertexNum 100
 
-typedef struct { //定义顺序表的结构体
+typedef struct { //定义邻接矩阵的图
   char Vex[MaxVertexNum];
   bool Edge[MaxVertexNum][MaxVertexNum]; //存带权图时改成int类型，对应位置记录权值，其余位置记为无穷
   int VexNum, EdgeNum; //当前的顶点数和边数

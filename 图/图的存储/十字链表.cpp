@@ -2,6 +2,8 @@
 #include<stdlib.h>
 //该方法只能存储有向图
 
+#define MaxVertexNum 100
+
 typedef struct ENode{ //定义边
   int tailvex; //弧尾节点
   int headvex; //弧头节点
@@ -16,7 +18,7 @@ typedef struct VNode{ //定义顶点节点
 }V;
 
 
-typedef struct { //定义顺序表的结构体
+typedef struct { //定义十字链表的图
   char VNode[MaxVertexNum]; //所有的顶点
   int VexNum, EdgeNum; //当前的顶点数和边数
 }ALGraph;

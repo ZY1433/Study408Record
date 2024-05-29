@@ -15,7 +15,7 @@ typedef struct VNode{ //定义顶点节点
 }V;
 
 
-typedef struct { //定义顺序表的结构体
+typedef struct { //定义邻接表的图
   VNode vertex[MaxVertexNum]; //所有的顶点
   int VexNum, EdgeNum; //当前的顶点数和边数
 }ALGraph;
