@@ -3,6 +3,7 @@
 
 #define ElmeType int
 #define MaxVertexNum 100
+#define INF 0x3f3f3f3f
 //队列
 typedef struct { //定义顺序队列的结构体
   int front,rear;
@@ -52,32 +53,31 @@ typedef struct { //定义邻接表的图
   int VexNum, EdgeNum; //当前的顶点数和边数
 }ALGraph;
 
-void ALG_visit(VNode v){ //邻接表的访问函数，读出节点数据
-  printf("%c",v.data);
-}
+int d[MaxVertexNum];
+int path[MaxVertexNum];
 
-void ALG_BFS(ALGraph G) { //基于邻接表的广搜
+void ALG_BFS(ALGraph G, int idx) { //基于邻接表的广搜，判断idx到其它点的最短路
   for (int i = 0; i < G.VexNum; i++){ //初始化访问判断数组
     visited[i] = false;
+    d[i] = INF;  //初始化距离数组
+    path[i] = -1;  //初始化路径数组
   }
+  d[idx] = 0;
   SqQueue Q;
   InitQueue(Q); // 初始化队列
+  EnQueue(Q,idx);//让idx先入队
+  visited[idx] = true;//设成已访问
+  while (!QueueEmpty(Q)){ // 当队列非空 循环
+    int u;
+    DeQueue(Q,u); //队头出队
 
-  for (int i = 0; i < G.VexNum; i++){ //遍历节点
-    if(!visited[i]){ //遇到未访问节点
-      EnQueue(Q,i); //入队
-      visited[i] = true; //设成已经访问
-    }
-    while (!QueueEmpty(Q)){ // 当队列非空 循环
-      int e;
-      DeQueue(Q,e); //队头出队
-      ALG_visit(G.vertex[e]); //访问出队元素
-      if(G.vertex[e].first != NULL){ //当出队元素有相接的节点时
-        e = G.vertex[e].first->adjvex; // 指向这一节点
-      }
-      if(!visited[e]){ //若这一节点未访问
-        EnQueue(Q,e); //入队
-        visited[e] = true; //设置成已访问
+    for(ENode *t = G.vertex[u].first; t != NULL; t = t->next){
+      int v = t->adjvex;//新到的节点
+      if(!visited[v]){//若没访问过
+        EnQueue(Q,v);//入队
+        d[v] = d[u] + 1; //距离为原距离+1
+        path[v] = u;//记录它是由u到达的
+        visited[v] = true;//置为已访问
       }
     }
   }
@@ -90,32 +90,28 @@ typedef struct { //定义邻接矩阵的图
   int VexNum, EdgeNum; //当前的顶点数和边数
 }MGraph;
 
-void MG_visit(char e){ //邻接矩阵的访问函数，输出节点数据
-  printf("%c",e);
-}
 
-void MG_BFS(MGraph G) { //基于邻接矩阵的广搜
+void MG_BFS(MGraph G, int idx) { //基于邻接矩阵的广搜
   for (int i = 0; i < G.VexNum; i++){ //初始化访问判断数组
     visited[i] = false;
+    d[i] = INF;  //初始化距离数组
+    path[i] = -1;  //初始化路径数组
   }
+  d[idx] = 0;
   SqQueue Q;
   InitQueue(Q);//初始化队列
-  for (int i = 0; i < G.VexNum; i++){ //对每个联通分量遍历
-    if(!visited[i]){//判断是否访问节点
-      EnQueue(Q,i); //入队
-      visited[i] = true; //设为已访问
-    }
-    while (!QueueEmpty(Q)){ //队不空
-      int t;
-      DeQueue(Q,t); //出队头
-      MG_visit(G.Vex[t]); //访问队头
-      for (int j = 0; j < G.VexNum; j++){ //遍历队头可到达的节点
-        if(G.Edge[t][j] != 0 && !visited[j]){ //找到与队头相连且未访问的节点
-          EnQueue(Q,j); //将其入队
-          visited[j] = true; //设为已访问
-        }
+  EnQueue(Q,idx);
+  visited[idx] = true;
+  while (!QueueEmpty(Q)){ //队不空
+    int t;
+    DeQueue(Q,t); //出队头
+    for (int j = 0; j < G.VexNum; j++){ //遍历队头可到达的节点
+      if(G.Edge[t][j] != 0 && !visited[j]){ //找到与队头相连且未访问的节点
+        EnQueue(Q,j); //将其入队
+        d[j] = d[t] + 1;
+        path[j] = t;
+        visited[j] = true; //设为已访问
       }
     }
-    
   }
 }

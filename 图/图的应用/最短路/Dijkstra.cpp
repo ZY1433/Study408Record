@@ -21,41 +21,42 @@ typedef struct ALGraph{ //定义邻接表的图
   VNode vertex[MaxVertexNum]; //所有的顶点
   int VexNum, EdgeNum; //当前的顶点数和边数
 }ALGraph;
+  int dist[MaxVertexNum];//距离
+  int path[MaxVertexNum];//路径
+  bool final[MaxVertexNum];//是否确定最短路
 
-int prim(ALGraph G){
-  int ans = 0;
-  int dist[G.VexNum];//距离
-  bool included[G.VexNum];//最小生成树包含的点
+bool dijkstra(ALGraph G, int idx){
   for(int i = 0; i < G.VexNum; i++){
     dist[i] = INF; //初始化为无穷
-    included[i] = false;//初始化为未加入
+    path[i] = -1; //初始化路径
+    final[i] = false;//初始化为未加入
   }
 
-  dist[0] = 0;//假设从第0个点开始，将其距离设为0
+  dist[idx] = 0;//从第idx个点开始，将其距离设为0
+
   for (int i = 0; i < G.VexNum; i++) {
         int u = -1;//距离第i个点最近的未加入的点的下标
         int min = INF;//最小值先设为无穷大
 
         for (int j = 0; i < G.VexNum; j++){//遍历所有顶点
-          if(!included[j] && dist[j] < min){//未加入 且比最小值小
+          if(!final[j] && dist[j] < min){//未确定最小距离 且比当前最小值小
             u = j;//更新
           }
         }
 
-        if(u == -1){ //若u未变动，说明这不是联通图，不会有最小生成树，跳出循环即可
-          ans = -1;
+        if(u == -1){ //若u未变动，说明这不是联通图，已经没有idx能到达的顶点了，结束即可
           break;
         }
-        included[u] = true;//把最近的未加入的点加入
+        final[u] = true;//这说明u是为确定里距离目标点最近的那个，将其加入
 
         for (ENode *p = G.vertex[u].first; p != NULL ; p = p->next){
           //用和这个点相接的未加入的点更新dist
           int v = p->adjvex;
-          if(!included[v] && p->weight < dist[v]){
+          if(!final[v] && p->weight < dist[v]){
             dist[v] = p->weight;
           }
         }
     }
-  return ans;
+  return true;
 }
 
